@@ -1393,15 +1393,30 @@
   });
 
   function submitForm() {
-    const name = document.getElementById('form-name').value.trim();
-    const email = document.getElementById('form-email').value.trim();
+    const name    = document.getElementById('form-name').value.trim();
+    const email   = document.getElementById('form-email').value.trim();
+    const company = document.getElementById('form-company').value.trim();
+    const plan    = document.getElementById('form-plan').value;
+
     if (!name || !email) {
       alert('Por favor, preencha nome e e-mail.');
       return;
     }
+
     closeModal();
-    // Aqui você integra com seu backend / CRM
-    alert('Obrigado, ' + name + '! Entraremos em contato em breve.');
+
+    const msg = [
+      '👋 Olá! Vim pelo site da *Qualifica.IA* e gostaria de solicitar um orçamento.',
+      '',
+      '📋 *Minhas informações:*',
+      '• Nome: ' + name,
+      '• E-mail: ' + email,
+      company ? '• Empresa: ' + company : '',
+      plan    ? '• Plano de interesse: ' + plan : '',
+    ].filter(Boolean).join('\n');
+
+    const url = 'https://wa.me/5511930613247?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank');
   }
 
   /* ── spotlight effect on bento cards ── */
