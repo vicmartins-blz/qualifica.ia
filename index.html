@@ -321,6 +321,60 @@
     .plan-price { font-family: 'Space Grotesk', monospace; font-size: 22px; font-weight: 700; color: var(--orange); letter-spacing: -0.02em; }
     .plan-badge-mini { font-size: 10px; padding: 2px 9px; border-radius: 999px; background: rgba(124,92,255,0.12); color: var(--purple); margin-left: 8px; vertical-align: middle; font-weight: 600; }
 
+    /* ── SLIDER DE COMPROMETIMENTO ── */
+    .slider-wrap { margin: 28px 0 8px; text-align: center; }
+    .slider-value-display {
+      font-family: 'Bricolage Grotesque', sans-serif; font-size: 56px; font-weight: 800;
+      background: linear-gradient(135deg, var(--orange), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1; margin-bottom: 18px;
+    }
+    .dedication-slider {
+      width: 100%; height: 8px; border-radius: 999px;
+      background: linear-gradient(90deg, var(--orange) 0%, var(--yellow) 50%, var(--purple) 100%);
+      outline: none; -webkit-appearance: none; appearance: none; cursor: pointer;
+    }
+    .dedication-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%;
+      background: #fff; border: 4px solid var(--orange);
+      box-shadow: var(--shadow-md); cursor: pointer; transition: transform 0.15s ease;
+    }
+    .dedication-slider::-webkit-slider-thumb:active { transform: scale(1.15); }
+    .dedication-slider::-moz-range-thumb {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #fff; border: 4px solid var(--orange);
+      box-shadow: var(--shadow-md); cursor: pointer;
+    }
+    .slider-labels { display: flex; justify-content: space-between; margin-top: 10px; font-size: 12px; color: var(--fg-muted); font-weight: 600; }
+
+    /* ── OFERTA COM TIMER ── */
+    .offer-timer-box {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: linear-gradient(90deg, #FFEDE5, #FFF6E0);
+      border: 1.5px solid var(--orange);
+      border-radius: 14px; padding: 12px 16px; flex-wrap: wrap;
+    }
+    .offer-timer-label { font-size: 13px; font-weight: 600; color: var(--fg); }
+    .offer-timer-clock {
+      font-family: 'Space Grotesk', monospace; font-size: 20px; font-weight: 700;
+      color: var(--orange); letter-spacing: 0.02em;
+    }
+    .offer-price-box {
+      background: var(--bg-soft); border: 2px solid var(--border); border-radius: 18px;
+      padding: 28px 24px; margin: 24px 0 8px; text-align: center; position: relative;
+    }
+    .offer-discount-badge {
+      position: absolute; top: -14px; right: 18px;
+      background: linear-gradient(135deg, var(--purple), #9B7BFF);
+      color: #fff; font-family: 'Space Grotesk', monospace; font-weight: 700; font-size: 13px;
+      padding: 6px 14px; border-radius: 999px; box-shadow: var(--shadow-sm);
+    }
+    .offer-price-old { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; }
+    .offer-price-old-value { font-size: 20px; color: var(--fg-muted); text-decoration: line-through; font-weight: 500; }
+    .offer-price-x { color: #E63946; font-size: 20px; font-weight: 800; }
+    .offer-price-new-label { display: block; font-size: 13px; color: var(--fg-muted); margin-bottom: 4px; font-weight: 500; }
+    .offer-price-new-value { font-family: 'Bricolage Grotesque', sans-serif; font-size: 44px; font-weight: 800; color: var(--orange); letter-spacing: -0.02em; }
+
     /* ── CTA SECTION ── */
     .cta-section { padding: 100px 0; border-top: 1px solid var(--border); text-align: center; position: relative; overflow: hidden; }
     .cta-section h2 { font-size: clamp(32px, 5.5vw, 62px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 18px; }
@@ -556,7 +610,7 @@
           <p class="funnel-sub">Responda rapidinho e já parte pra conversa no WhatsApp.</p>
         </div>
 
-        <div class="step-indicator" aria-label="Progresso do formulário">
+        <div class="step-indicator" id="stepIndicator" aria-label="Progresso do formulário">
           <div class="step-dot active" id="dot-0"></div>
           <div class="step-dot" id="dot-1"></div>
           <div class="step-dot" id="dot-2"></div>
@@ -564,9 +618,9 @@
           <div class="step-dot" id="dot-4"></div>
         </div>
 
-        <div class="funnel-card">
+        <div class="funnel-card" id="funnelCard">
 
-          <!-- Etapa 1: Nome -->
+          <!-- Etapa 0: Nome -->
           <div class="funnel-step active" id="step-0">
             <p class="step-question">👋 Qual é o seu nome?</p>
             <p class="step-hint">Vamos personalizar tudo pra você.</p>
@@ -574,7 +628,7 @@
             <button class="btn-next" onclick="nextStep(0)">Continuar →</button>
           </div>
 
-          <!-- Etapa 2: WhatsApp -->
+          <!-- Etapa 1: WhatsApp -->
           <div class="funnel-step" id="step-1">
             <p class="step-question">📱 Qual é o seu WhatsApp?</p>
             <p class="step-hint">Pra entrarmos em contato e entregar o site.</p>
@@ -583,12 +637,12 @@
             <br/><button class="btn-back" onclick="prevStep(1)">← Voltar</button>
           </div>
 
-          <!-- Etapa 3: Único objetivo -->
+          <!-- Etapa 2: Único objetivo (bifurcação) -->
           <div class="funnel-step" id="step-2">
             <p class="step-question">🎯 O que você quer fazer?</p>
             <p class="step-hint">Escolha uma opção pra continuar.</p>
 
-            <button class="single-cta-option" onclick="selectOption(this, 'Criar meu site agora')">
+            <button class="single-cta-option" onclick="selectOption(this, 'site')">
               <span class="option-icon-big">🚀</span>
               <div>
                 <div class="option-text-title">Criar meu site agora!!</div>
@@ -596,7 +650,7 @@
               </div>
             </button>
 
-            <button class="single-cta-option alt" onclick="selectOption(this, 'Aprender a criar sites para revenda')">
+            <button class="single-cta-option alt" onclick="selectOption(this, 'revenda')">
               <span class="option-icon-big">🎓</span>
               <div>
                 <div class="option-text-title">Quero aprender a criar sites para revenda!!</div>
@@ -608,41 +662,109 @@
             <br/><button class="btn-back" onclick="prevStep(2)">← Voltar</button>
           </div>
 
-          <!-- Etapa 4: Tipo de negócio -->
-          <div class="funnel-step" id="step-3">
+          <!-- ═══════ CAMINHO A: CRIAR SITE ═══════ -->
+
+          <!-- Etapa 3A: Tipo de negócio -->
+          <div class="funnel-step" id="step-3-site">
             <p class="step-question">🏷️ Que tipo de negócio você tem?</p>
             <p class="step-hint">Assim já sabemos como te ajudar melhor.</p>
 
-            <button class="single-cta-option" onclick="selectBusiness(this, 'Produto Digital')">
+            <button class="single-cta-option" onclick="selectBusiness(this, 'produto')">
               <span class="option-icon-big">💻</span>
               <div><div class="option-text-title">Produto Digital</div></div>
             </button>
-            <button class="single-cta-option alt" onclick="selectBusiness(this, 'Consultoria')">
+            <button class="single-cta-option alt" onclick="selectBusiness(this, 'consultoria')">
               <span class="option-icon-big">🧭</span>
               <div><div class="option-text-title">Consultoria</div></div>
             </button>
-            <button class="single-cta-option" onclick="selectBusiness(this, 'Loja')">
+            <button class="single-cta-option" onclick="selectBusiness(this, 'loja')">
               <span class="option-icon-big">🛍️</span>
               <div><div class="option-text-title">Loja</div></div>
             </button>
-            <button class="single-cta-option alt" onclick="selectBusiness(this, 'Quero criar um negócio do zero')">
+            <button class="single-cta-option alt" onclick="selectBusiness(this, 'zero')">
               <span class="option-icon-big">🌱</span>
               <div><div class="option-text-title">Quero criar um negócio do zero</div></div>
             </button>
 
-            <button class="btn-next" onclick="nextStep(3)" id="btn-step3" disabled>Continuar →</button>
-            <br/><button class="btn-back" onclick="prevStep(3)">← Voltar</button>
+            <button class="btn-next" onclick="goToPlansStep()" id="btn-step3-site" disabled>Continuar →</button>
+            <br/><button class="btn-back" onclick="backToStep2()">← Voltar</button>
           </div>
 
-          <!-- Etapa 5: Planos -->
-          <div class="funnel-step" id="step-4">
+          <!-- Etapa 4A: Planos -->
+          <div class="funnel-step" id="step-4-site">
             <p class="step-question">✨ Escolha o seu plano</p>
-            <p class="step-hint" id="plans-hint">Selecione a opção ideal pra você:</p>
+            <p class="step-hint">Selecione a opção ideal pra você:</p>
             <div id="plans-container"></div>
-            <button class="btn-next" onclick="finalizarNoWhatsApp()" id="btn-final" disabled>
+            <button class="btn-next" onclick="finalizarSiteNoWhatsApp()" id="btn-final-site" disabled>
               🚀 Quero começar agora
             </button>
-            <br/><button class="btn-back" onclick="prevStep(4)">← Voltar</button>
+            <br/><button class="btn-back" onclick="showStep('step-3-site', 3)">← Voltar</button>
+          </div>
+
+          <!-- ═══════ CAMINHO B: REVENDA ═══════ -->
+
+          <!-- Etapa 3B: Slider de comprometimento -->
+          <div class="funnel-step" id="step-3-revenda">
+            <p class="step-question">🔥 De 0 a 100,</p>
+            <p class="step-hint">o quanto você está disposto a se dedicar para mudar de vida?</p>
+
+            <div class="slider-wrap">
+              <div class="slider-value-display" id="sliderValueDisplay">50</div>
+              <input type="range" min="0" max="100" value="50" class="dedication-slider" id="dedicationSlider" oninput="updateSliderValue(this.value)" />
+              <div class="slider-labels">
+                <span>Pouco</span>
+                <span>Tudo!</span>
+              </div>
+            </div>
+
+            <button class="btn-next" onclick="goToRevendaChoice()">Continuar →</button>
+            <br/><button class="btn-back" onclick="backToStep2()">← Voltar</button>
+          </div>
+
+          <!-- Etapa 4B: Escolha de jornada -->
+          <div class="funnel-step" id="step-4-revenda">
+            <p class="step-question">💡 Qual é o seu momento?</p>
+            <p class="step-hint">Escolha o que mais representa você agora.</p>
+
+            <button class="single-cta-option" onclick="selectRevendaPath(this, 'vender')">
+              <span class="option-icon-big">💸</span>
+              <div><div class="option-text-title">Preciso sair do zero e começar a vender!</div></div>
+            </button>
+            <button class="single-cta-option alt" onclick="selectRevendaPath(this, 'ensinar')">
+              <span class="option-icon-big">🧑‍🏫</span>
+              <div><div class="option-text-title">Quero aprender para ensinar!</div></div>
+            </button>
+
+            <button class="btn-next" onclick="goToOfferStep()" id="btn-step4-revenda" disabled>Ver minha oferta →</button>
+            <br/><button class="btn-back" onclick="showStep('step-3-revenda', 3)">← Voltar</button>
+          </div>
+
+          <!-- Etapa 5B: Oferta exclusiva com timer -->
+          <div class="funnel-step" id="step-5-offer">
+            <div class="offer-timer-box" id="offerTimerBox">
+              <span class="offer-timer-label">⏳ Oferta exclusiva expira em</span>
+              <span class="offer-timer-clock" id="offerTimerClock">07:00</span>
+            </div>
+
+            <p class="step-question" style="margin-top:24px;">🎁 Sua condição exclusiva</p>
+            <p class="step-hint">Liberada especialmente pra você que chegou até aqui.</p>
+
+            <div class="offer-price-box">
+              <div class="offer-discount-badge" id="offerDiscountBadge">−90% OFF</div>
+              <div class="offer-price-old">
+                <span class="offer-price-old-value">R$ 697,90</span>
+                <span class="offer-price-x" aria-hidden="true">✕</span>
+              </div>
+              <div class="offer-price-new">
+                <span class="offer-price-new-label">Hoje por apenas</span>
+                <span class="offer-price-new-value">R$ 67,90</span>
+              </div>
+            </div>
+
+            <button class="btn-next" onclick="finalizarOfertaNoWhatsApp()" id="btn-final-offer" style="background:linear-gradient(135deg, var(--purple), #9B7BFF); box-shadow:0 6px 20px rgba(124,92,255,0.35);">
+              🚀 Garantir minha vaga por R$ 67,90
+            </button>
+            <p id="offerExpiredMsg" style="display:none; color: var(--fg-muted); font-size:13px; margin-top:14px;">Essa oferta expirou, mas ainda dá pra falar com a gente no WhatsApp 👇</p>
           </div>
 
         </div>
@@ -715,57 +837,65 @@
     mobileBtn.setAttribute('aria-expanded','false');
   }));
 
-  let currentStep = 0;
-  let selectedOption = '';
-  let selectedBusiness = '';
-  let selectedPlan   = '';
-  const totalSteps   = 5;
+  let selectedOption = '';   // 'site' | 'revenda'
+  let selectedBusiness = ''; // produto | consultoria | loja | zero
+  let selectedPlan = '';
+  let selectedRevendaPath = ''; // vender | ensinar
+  let dedicationValue = 50;
+
+  const totalSteps = 5; // visual apenas, indicador
 
   const PLANS = {
-    site: [
-      { name: 'Criar meu site', desc: 'Site completo no ar com WhatsApp conectado', price: 'R$ 29,99', featured: false },
-    ],
-    curso: [
-      { name: 'Curso completo', desc: 'Aprenda a criar e revender sites com IA', price: 'R$ 67,90', featured: true },
-    ]
+    produto:     { name: 'Site para Produto Digital', desc: 'Site completo no ar com WhatsApp conectado', price: 'R$ 29,99' },
+    consultoria: { name: 'Site para Consultoria',      desc: 'Site completo no ar com WhatsApp conectado', price: 'R$ 29,99' },
+    loja:        { name: 'Site para Loja',             desc: 'Site completo no ar com WhatsApp conectado', price: 'R$ 29,99' },
+    zero:        { name: 'Site para começar do zero',  desc: 'A gente te ajuda a estruturar e criar',      price: 'R$ 29,99' }
   };
 
   function updateDots(step) {
     for (let i = 0; i < totalSteps; i++) {
       const dot = document.getElementById('dot-' + i);
+      if (!dot) continue;
       dot.classList.remove('active','done');
       if (i < step)  dot.classList.add('done');
       if (i === step) dot.classList.add('active');
     }
   }
 
-  function showStep(index) {
+  function showStep(id, dotIndex) {
     document.querySelectorAll('.funnel-step').forEach(s => s.classList.remove('active'));
-    document.getElementById('step-' + index).classList.add('active');
-    currentStep = index;
-    updateDots(index);
+    document.getElementById(id).classList.add('active');
+    updateDots(dotIndex);
   }
 
   function nextStep(from) {
     if (from === 0) {
       const name = document.getElementById('input-name').value.trim();
       if (!name) { document.getElementById('input-name').focus(); return; }
+      showStep('step-1', 1);
+      return;
     }
     if (from === 1) {
       const phone = document.getElementById('input-phone').value.trim();
       if (!phone) { document.getElementById('input-phone').focus(); return; }
+      showStep('step-2', 2);
+      return;
     }
     if (from === 2) {
       if (!selectedOption) return;
+      if (selectedOption === 'site') {
+        showStep('step-3-site', 3);
+      } else {
+        showStep('step-3-revenda', 3);
+      }
     }
-    if (from === 3) {
-      if (!selectedBusiness) return;
-      renderPlans();
-    }
-    showStep(from + 1);
   }
 
-  function prevStep(from) { showStep(from - 1); }
+  function prevStep(from) {
+    if (from === 1) showStep('step-0', 0);
+  }
+
+  function backToStep2() { showStep('step-2', 2); }
 
   function selectOption(btn, value) {
     document.querySelectorAll('#step-2 .single-cta-option').forEach(b => b.classList.remove('selected'));
@@ -774,51 +904,123 @@
     document.getElementById('btn-step2').disabled = false;
   }
 
+  /* ── CAMINHO A: SITE ── */
   function selectBusiness(btn, value) {
-    document.querySelectorAll('#step-3 .single-cta-option').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('#step-3-site .single-cta-option').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
     selectedBusiness = value;
-    document.getElementById('btn-step3').disabled = false;
+    document.getElementById('btn-step3-site').disabled = false;
+  }
+
+  function goToPlansStep() {
+    if (!selectedBusiness) return;
+    renderPlans();
+    showStep('step-4-site', 4);
   }
 
   function renderPlans() {
     const container = document.getElementById('plans-container');
     container.innerHTML = '';
     selectedPlan = '';
-    document.getElementById('btn-final').disabled = true;
+    document.getElementById('btn-final-site').disabled = true;
 
-    const key = selectedOption === 'Criar meu site agora' ? 'site' : 'curso';
-    const list = PLANS[key];
-
-    list.forEach((plan, idx) => {
-      const div = document.createElement('div');
-      div.className = 'plan-option' + (plan.featured ? ' featured-plan' : '');
-      div.innerHTML =
-        '<div class="plan-left">' +
-          '<div class="plan-name">' + plan.name + (plan.featured ? '<span class="plan-badge-mini">Recomendado</span>' : '') + '</div>' +
-          '<div class="plan-desc">' + plan.desc + '</div>' +
-        '</div>' +
-        '<div class="plan-price">' + plan.price + '</div>';
-      div.addEventListener('click', () => selectPlan(div, plan.name + ' — ' + plan.price));
-      container.appendChild(div);
-
-      /* auto-select se for única opção */
-      if (list.length === 1) selectPlan(div, plan.name + ' — ' + plan.price);
-    });
+    const plan = PLANS[selectedBusiness];
+    const div = document.createElement('div');
+    div.className = 'plan-option featured-plan';
+    div.innerHTML =
+      '<div class="plan-left">' +
+        '<div class="plan-name">' + plan.name + '<span class="plan-badge-mini">Recomendado</span></div>' +
+        '<div class="plan-desc">' + plan.desc + '</div>' +
+      '</div>' +
+      '<div class="plan-price">' + plan.price + '</div>';
+    div.addEventListener('click', () => selectPlan(div));
+    container.appendChild(div);
+    selectPlan(div);
   }
 
-  function selectPlan(el, value) {
-    document.querySelectorAll('.plan-option').forEach(p => p.classList.remove('selected'));
+  function selectPlan(el) {
+    document.querySelectorAll('#plans-container .plan-option').forEach(p => p.classList.remove('selected'));
     el.classList.add('selected');
-    selectedPlan = value;
-    document.getElementById('btn-final').disabled = false;
+    selectedPlan = PLANS[selectedBusiness].price;
+    document.getElementById('btn-final-site').disabled = false;
   }
 
-  function finalizarNoWhatsApp() {
+  function finalizarSiteNoWhatsApp() {
     const name = document.getElementById('input-name').value.trim();
-    const acao = selectedOption === 'Criar meu site agora' ? 'criar meu site agora' : 'aprender a criar sites para revenda';
-    const msg = 'Olá eu sou o ' + name + ', tenho um negócio de ' + selectedBusiness + ' e quero ' + acao + '!';
+    let msg = '';
+    if (selectedBusiness === 'produto') {
+      msg = 'Fala aí! me chamo ' + name + ', tenho um produto digital e gostaria de criar meu site!';
+    } else if (selectedBusiness === 'consultoria') {
+      msg = 'Fala aí! me chamo ' + name + ', presto serviço de consultoria e gostaria de criar meu site!';
+    } else if (selectedBusiness === 'loja') {
+      msg = 'Fala aí! me chamo ' + name + ', possuo uma loja e quero criar meu site!';
+    } else if (selectedBusiness === 'zero') {
+      msg = 'Fala aí! me chamo ' + name + ', gostaria de criar meu site do zero, mas ainda não tenho produto/serviço para vender, poderia me ajudar?';
+    }
     window.open('https://wa.me/5511930613247?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  /* ── CAMINHO B: REVENDA ── */
+  function updateSliderValue(val) {
+    dedicationValue = val;
+    document.getElementById('sliderValueDisplay').textContent = val;
+  }
+
+  function goToRevendaChoice() {
+    showStep('step-4-revenda', 4);
+  }
+
+  function selectRevendaPath(btn, value) {
+    document.querySelectorAll('#step-4-revenda .single-cta-option').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedRevendaPath = value;
+    document.getElementById('btn-step4-revenda').disabled = false;
+  }
+
+  function goToOfferStep() {
+    if (!selectedRevendaPath) return;
+    showStep('step-5-offer', 4);
+    startOfferTimer();
+  }
+
+  function finalizarOfertaNoWhatsApp() {
+    const msg = 'Fala aí! quero aprender a criar meu site e aproveitar a oferta de apenas 67,90!';
+    window.open('https://wa.me/5511930613247?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  /* ── TIMER PERSISTENTE (sessionStorage) ── */
+  const OFFER_DURATION_SECONDS = 7 * 60;
+  let offerTimerInterval = null;
+
+  function startOfferTimer() {
+    let deadline = sessionStorage.getItem('qualifica_offer_deadline');
+    if (!deadline) {
+      deadline = Date.now() + OFFER_DURATION_SECONDS * 1000;
+      sessionStorage.setItem('qualifica_offer_deadline', deadline);
+    } else {
+      deadline = parseInt(deadline, 10);
+    }
+
+    if (offerTimerInterval) clearInterval(offerTimerInterval);
+
+    function tick() {
+      const remainingMs = deadline - Date.now();
+      if (remainingMs <= 0) {
+        clearInterval(offerTimerInterval);
+        document.getElementById('offerTimerClock').textContent = '00:00';
+        document.getElementById('offerTimerBox').style.opacity = '0.5';
+        document.getElementById('btn-final-offer').style.display = 'none';
+        document.getElementById('offerExpiredMsg').style.display = 'block';
+        return;
+      }
+      const totalSec = Math.floor(remainingMs / 1000);
+      const min = Math.floor(totalSec / 60).toString().padStart(2,'0');
+      const sec = (totalSec % 60).toString().padStart(2,'0');
+      document.getElementById('offerTimerClock').textContent = min + ':' + sec;
+    }
+
+    tick();
+    offerTimerInterval = setInterval(tick, 1000);
   }
 
   document.getElementById('input-name').addEventListener('keydown',  e => { if(e.key==='Enter') nextStep(0); });
