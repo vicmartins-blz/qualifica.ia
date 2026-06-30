@@ -561,6 +561,7 @@
           <div class="step-dot" id="dot-1"></div>
           <div class="step-dot" id="dot-2"></div>
           <div class="step-dot" id="dot-3"></div>
+          <div class="step-dot" id="dot-4"></div>
         </div>
 
         <div class="funnel-card">
@@ -607,15 +608,41 @@
             <br/><button class="btn-back" onclick="prevStep(2)">← Voltar</button>
           </div>
 
-          <!-- Etapa 4: Planos -->
+          <!-- Etapa 4: Tipo de negócio -->
           <div class="funnel-step" id="step-3">
+            <p class="step-question">🏷️ Que tipo de negócio você tem?</p>
+            <p class="step-hint">Assim já sabemos como te ajudar melhor.</p>
+
+            <button class="single-cta-option" onclick="selectBusiness(this, 'Produto Digital')">
+              <span class="option-icon-big">💻</span>
+              <div><div class="option-text-title">Produto Digital</div></div>
+            </button>
+            <button class="single-cta-option alt" onclick="selectBusiness(this, 'Consultoria')">
+              <span class="option-icon-big">🧭</span>
+              <div><div class="option-text-title">Consultoria</div></div>
+            </button>
+            <button class="single-cta-option" onclick="selectBusiness(this, 'Loja')">
+              <span class="option-icon-big">🛍️</span>
+              <div><div class="option-text-title">Loja</div></div>
+            </button>
+            <button class="single-cta-option alt" onclick="selectBusiness(this, 'Quero criar um negócio do zero')">
+              <span class="option-icon-big">🌱</span>
+              <div><div class="option-text-title">Quero criar um negócio do zero</div></div>
+            </button>
+
+            <button class="btn-next" onclick="nextStep(3)" id="btn-step3" disabled>Continuar →</button>
+            <br/><button class="btn-back" onclick="prevStep(3)">← Voltar</button>
+          </div>
+
+          <!-- Etapa 5: Planos -->
+          <div class="funnel-step" id="step-4">
             <p class="step-question">✨ Escolha o seu plano</p>
             <p class="step-hint" id="plans-hint">Selecione a opção ideal pra você:</p>
             <div id="plans-container"></div>
             <button class="btn-next" onclick="finalizarNoWhatsApp()" id="btn-final" disabled>
               🚀 Quero começar agora
             </button>
-            <br/><button class="btn-back" onclick="prevStep(3)">← Voltar</button>
+            <br/><button class="btn-back" onclick="prevStep(4)">← Voltar</button>
           </div>
 
         </div>
@@ -690,8 +717,9 @@
 
   let currentStep = 0;
   let selectedOption = '';
+  let selectedBusiness = '';
   let selectedPlan   = '';
-  const totalSteps   = 4;
+  const totalSteps   = 5;
 
   const PLANS = {
     site: [
@@ -729,6 +757,9 @@
     }
     if (from === 2) {
       if (!selectedOption) return;
+    }
+    if (from === 3) {
+      if (!selectedBusiness) return;
       renderPlans();
     }
     showStep(from + 1);
@@ -737,11 +768,17 @@
   function prevStep(from) { showStep(from - 1); }
 
   function selectOption(btn, value) {
-    document.querySelectorAll('.single-cta-option').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('#step-2 .single-cta-option').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
     selectedOption = value;
-    const nextBtn = document.getElementById('btn-step2');
-    nextBtn.disabled = false;
+    document.getElementById('btn-step2').disabled = false;
+  }
+
+  function selectBusiness(btn, value) {
+    document.querySelectorAll('#step-3 .single-cta-option').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedBusiness = value;
+    document.getElementById('btn-step3').disabled = false;
   }
 
   function renderPlans() {
@@ -780,7 +817,7 @@
   function finalizarNoWhatsApp() {
     const name = document.getElementById('input-name').value.trim();
     const acao = selectedOption === 'Criar meu site agora' ? 'criar meu site agora' : 'aprender a criar sites para revenda';
-    const msg = 'Olá eu sou o ' + name + ', quero ' + acao + '!';
+    const msg = 'Olá eu sou o ' + name + ', tenho um negócio de ' + selectedBusiness + ' e quero ' + acao + '!';
     window.open('https://wa.me/5511930613247?text=' + encodeURIComponent(msg), '_blank');
   }
 
